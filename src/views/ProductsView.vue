@@ -1,37 +1,71 @@
 <script setup>
 import Grid from '@/components/Grid.vue';
 import ProductList from '@/components/ProductList.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const products = ref([
-    { id: 1, nome: "Scarpe Nike Air", prezzo: 150, inStock: true },
-    { id: 2, nome: "Maglietta Adidas", prezzo: 45, inStock: true },
-    { id: 3, nome: "Jeans Levi's", prezzo: 85, inStock: false },
-    { id: 4, nome: "Orologio Casio", prezzo: 60, inStock: true },
-    { id: 5, nome: "Zaino Eastpak", prezzo: 70, inStock: true },
-    { id: 6, nome: "Cuffie Sony", prezzo: 120, inStock: false },
-    { id: 7, nome: "Occhiali Ray-Ban", prezzo: 130, inStock: true },
-    { id: 8, nome: "Portafoglio Pelle", prezzo: 40, inStock: true },
-    { id: 9, nome: "Giacca Invernale", prezzo: 180, inStock: false },
-    { id: 10, nome: "Smartphone Xiaomi", prezzo: 299, inStock: true }
-]);
+const libri = ref([]);
+const autori = ref([]);
 
-const gridColumns = ['nome', 'prezzo']
-
+const gridLibriColumns = ['titolo', 'anno', 'genere', 'autore.nome']
+const gridAutoriColumns = ['nome', 'nazione']
 const searchQuery = ref('')
+
+onMounted(() => {
+  fetch('http://localhost:8000/api/libri')
+    .then((response) => {
+      // Controllo manuale dello stato HTTP
+      if (!response.ok) {
+        throw new Error(`Errore HTTP: ${response.status}`)
+      }
+      // Converte la risposta in JSON (ritorna una nuova Promise)
+      return response.json()
+    })
+    .then((data) => {
+      // Aggiorna lo stato reattivo con i dati ricevuti
+      libri.value = data.results
+    })
+    
+    console.log(libri.value);
+
+  fetch('http://localhost:8000/api/autori')
+    .then((response) => {
+      // Controllo manuale dello stato HTTP
+      if (!response.ok) {
+        throw new Error(`Errore HTTP: ${response.status}`)
+      }
+      // Converte la risposta in JSON (ritorna una nuova Promise)
+      return response.json()
+    })
+    .then((data) => {
+      // Aggiorna lo stato reattivo con i dati ricevuti
+      autori.value = data.results
+    })
+    
+    console.log(autori.value);
+});
+
 
 </script>
 
 <template>
   <main class="main" >
-    <ProductList style="width: 45%;">
-    </ProductList>
+    <form id="search">
+      Cerca <input name="query" v-model="searchQuery">
+    </form>
+
     <Grid
       style="width: 45%;"
-      :data="products"
-      :columns="gridColumns"
+      :data="libri"
+      :columns="gridLibriColumns"
       :filter-key="searchQuery">
     </Grid>
+    
+    <!-- <Grid
+      style="width: 45%;"
+      :data="autori"
+      :columns="gridAutoriColumns"
+      :filter-key="searchQuery">
+    </Grid> -->
   </main>
 
 </template>

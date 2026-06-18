@@ -42,6 +42,12 @@ function sortBy(key) {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
+
+const getNestedValue = (obj, path) => {
+  return path.split('.').reduce((acc, key) => acc?.[key], obj)
+}
+
 </script>
 
 
@@ -61,7 +67,7 @@ function capitalize(str) {
     <tbody>
       <tr v-for="entry in filteredData">
         <td v-for="key in columns">
-          {{entry[key]}}
+          {{getNestedValue(entry, key)}}
         </td>
       </tr>
     </tbody>
