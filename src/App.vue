@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import Navbar from './components/Navbar.vue';
+import Home from './page/Home.vue';
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import Navbar from './components/Navbar.vue';
     <main>
         <RouterView />
     </main>
+    <!-- <Home></Home> -->
 </template>
 
 <style scoped>

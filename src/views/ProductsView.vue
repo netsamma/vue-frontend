@@ -6,6 +6,8 @@ import { onMounted, ref } from 'vue';
 const libri = ref([]);
 const autori = ref([]);
 
+const formShow = ref(true);
+
 const gridLibriColumns = ['titolo', 'anno', 'genere', 'autore.nome']
 const gridAutoriColumns = ['nome', 'nazione']
 const searchQuery = ref('')
@@ -49,9 +51,20 @@ onMounted(() => {
 
 <template>
   <main class="main" >
-    <form id="search">
-      Cerca <input name="query" v-model="searchQuery">
-    </form>
+    <div>
+      <form id="search">
+        Cerca <input name="query" v-model="searchQuery">
+      </form>
+      <button class="but-toggle" @click="formShow = !formShow">Toggle</button>
+
+      <Transition name="bounce">
+         <p v-if="formShow" style="text-align: center;">
+          Ciao, ecco del testo che rimbalza!
+        </p>
+      </Transition>
+     
+    </div>
+
 
     <Grid
       style="width: 45%;"
@@ -60,12 +73,6 @@ onMounted(() => {
       :filter-key="searchQuery">
     </Grid>
     
-    <!-- <Grid
-      style="width: 45%;"
-      :data="autori"
-      :columns="gridAutoriColumns"
-      :filter-key="searchQuery">
-    </Grid> -->
   </main>
 
 </template>
@@ -75,5 +82,28 @@ onMounted(() => {
     display: flex;
     justify-content:space-between;
   }
+  .but-toggle{
+    margin: 20px;
+    width: 200px;
+  }
+
+    .bounce-enter-active {
+        animation: bounce-in 0.8s;
+    }
+    .bounce-leave-active {
+        animation: bounce-in 0.8s reverse;
+    }
+
+    @keyframes bounce-in {
+      0% {
+          transform: scale(0);
+      }
+      50% {
+          transform: scale(1.25);
+      }
+      100% {
+          transform: scale(1);
+      }
+    }
 
 </style>
