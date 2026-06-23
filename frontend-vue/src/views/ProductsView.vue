@@ -9,7 +9,10 @@ const libri = ref([]);
 const formShow = ref(true);
 
 const gridLibriColumns = ['titolo', 'anno', 'genere', 'autore.nome']
+const radioSelection = ['titolo', 'anno', 'genere', 'autore.nome', 'all']
+
 const searchQuery = ref('')
+const selectedField = ref('all')
 
 onMounted(() => {
   fetch('http://localhost:8000/api/libri')
@@ -38,6 +41,13 @@ onMounted(() => {
     <div>
       <form id="search">
         Cerca <input name="query" v-model="searchQuery">
+        
+        <select v-model="selectedField">
+          <option v-for="key in radioSelection" :key="key">
+            {{ key }}
+          </option>
+        </select>
+
       </form>
       <button class="but-toggle" @click="formShow = !formShow">Toggle</button>
 
@@ -81,7 +91,8 @@ onMounted(() => {
       style="width: 45%;"
       :data="libri"
       :columns="gridLibriColumns"
-      :filter-key="searchQuery">
+      :filter-key="searchQuery"
+      :selected-field="selectedField">
     </Grid>
     
   </main>

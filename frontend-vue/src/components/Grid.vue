@@ -4,7 +4,8 @@ import { ref, computed } from 'vue'
 const props = defineProps({
   data: Array,
   columns: Array,
-  filterKey: String
+  filterKey: String,
+  selectedField: String,
 })
 
 const sortKey = ref('')
@@ -13,15 +14,14 @@ const sortOrders = ref(
 )
 
 const filteredData = computed(() => {
-  let { data, filterKey } = props
+  let { data, filterKey, selectedField } = props
   if (filterKey && data) {
     filterKey = filterKey.toLowerCase()
-    // console.log({ filterKey: filterKey })
     data = data.filter((row) => {
-      const allKeys = getAllKeys(row)
-      return allKeys.some((keyPath) => {
+      const keysToSearch = selectedField === 'all' ? getAllKeys(row) : [selectedField]
+      return keysToSearch.some(keyPath => {
         const value = getNestedValue(row, keyPath)
-        return String(value).toLowerCase().includes(filterKey)
+        return String(value).toLocaleLowerCase().includes(filterKey)
       })
     })
   }
