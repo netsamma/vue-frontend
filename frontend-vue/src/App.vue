@@ -2,15 +2,13 @@
 import Navbar from './components/Navbar.vue';
 </script>
 
-<template>
+<template class="main">
     <Navbar></Navbar>
-    <main>
-        <RouterView />
-    </main>
+    <RouterView />
 </template>
 
 <style scoped>
     main{
-        padding: 0.8rem;
+        padding: 3.8rem;
     }
 </style>
