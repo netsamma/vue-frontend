@@ -2,28 +2,25 @@
   <div class="product-card">
     <div class="product-card__image-container">
       <slot name="image">
-        <img src="https://via.placeholder.com/300x200?text=Nessuna+Immagine" alt="Prodotto" />
       </slot>
     </div>
 
     <div class="product-card__content">
       <slot name="content">
-        <h3 class="product-card__title">Titolo del Prodotto</h3>
-        <p class="product-card__description">Questa è una descrizione di fallback per il prodotto.</p>
       </slot>
     </div>
 
     <div class="product-card__footer">
       <slot name="footer">
-        <span class="product-card__price">0,00 €</span>
-        <button class="product-card__btn">Scopri di più</button>
       </slot>
     </div>
   </div>
 </template>
 
 <style scoped>
+
 .product-card {
+  position: relative;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   overflow: hidden;

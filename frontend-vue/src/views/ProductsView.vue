@@ -1,6 +1,5 @@
 <script setup>
 import Grid from '@/components/Grid.vue';
-import ProductCard from '@/components/ProductCard.vue';
 import ProductList from '@/components/ProductList.vue';
 import { onMounted, ref } from 'vue';
 
@@ -49,39 +48,16 @@ onMounted(() => {
         </select>
 
       </form>
-      <button class="but-toggle" @click="formShow = !formShow">Toggle</button>
 
+      <!-- <button class="but-toggle" @click="formShow = !formShow">Toggle</button> 
       <br>
       <Transition name="bounce">
          <p v-if="formShow" style="text-align: center;">
           Ciao, ecco del testo che rimbalza!
         </p>
       </Transition>
+      -->
 
-      <br>
-      <ProductCard>
-        <template #image>
-          <div class="badge-wrapper">
-            <span class="badge">Sconto 20%</span>
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="Scarpe Nike" />
-          </div>
-        </template>
-
-        <template #content>
-          <span class="category">Calzature</span>
-          <h3 class="custom-title">Nike Air Max v2</h3>
-          <p class="custom-desc">Comfort eccezionale e design iconico per le tue sessioni di corsa quotidiane.</p>
-        </template>
-
-        <template #footer>
-          <div class="price-container">
-            <span class="old-price">120,00 €</span>
-            <span class="new-price">96,00 €</span>
-          </div>
-          <button class="buy-btn" @click="addToCart">Acquista</button>
-        </template>
-      </ProductCard>
-      <br>
       <ProductList></ProductList>
      
     </div>
@@ -99,16 +75,16 @@ onMounted(() => {
 
 </template>
 
-<style>
-  .main{
-    display: flex;
-    justify-content:space-between;
-  }
-  .but-toggle{
-    margin: 20px;
-    width: 200px;
-  }
+<style scoped>
+    .main{
+      display: flex;
+      justify-content:space-between;
+    }
 
+    .but-toggle{
+      margin: 20px;
+      width: 200px;
+    }
     .bounce-enter-active {
         animation: bounce-in 0.8s;
     }
