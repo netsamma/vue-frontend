@@ -19,7 +19,7 @@
                <span class="old-price">€120,00</span>
                <span class="new-price">€96,00</span>
             </div>
-            <button class="add-btn" @click="addToCart">Aggiungi</button>
+            <button class="add-btn" @click="cartStore.addToCart(product)">Aggiungi</button>
          </template>
       </ProductCard>
 
@@ -30,10 +30,13 @@
 import { onMounted, ref } from 'vue';
 import ProductCard from '@/components/ProductCard.vue';
 import getProducts from '@/services/productService'
+import { useCartStore } from '@/stores/cartStore';
 
 const products = ref([])
 const error = ref(null)
 const loading = ref(true)
+
+const cartStore = useCartStore();
 
 onMounted(async () => {
    try {
@@ -45,6 +48,8 @@ onMounted(async () => {
    }
    console.log(products.value);
 })
+
+
 
 
 </script>
