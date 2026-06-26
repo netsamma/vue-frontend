@@ -1,11 +1,15 @@
 <script setup>
 import Grid from '@/components/Grid.vue';
 import ProductList from '@/components/ProductList.vue';
+import Modal from '@/components/Modal.vue';
 import { onMounted, ref } from 'vue';
 
 const libri = ref([]);
 
 const formShow = ref(true);
+
+const showModalNoTeleport = ref(false);
+const showModalTeleport = ref(false);
 
 const gridLibriColumns = ['titolo', 'anno', 'genere', 'autore.nome']
 const radioSelection = ['titolo', 'anno', 'genere', 'autore.nome', 'all']
@@ -57,8 +61,8 @@ onMounted(() => {
         </p>
       </Transition>
       -->
-
-      <ProductList></ProductList>
+      
+      <!-- <ProductList></ProductList> -->
      
     </div>
 
@@ -70,6 +74,17 @@ onMounted(() => {
       :filter-key="searchQuery"
       :selected-field="selectedField">
     </Grid>
+
+    <div class="buttons">
+      <button @click="showModalNoTeleport = true">Apri SENZA Teleport</button>
+      <button @click="showModalTeleport = true">Apri CON Teleport</button>
+    </div>
+
+    <Modal 
+      :is-open="showModalNoTeleport" 
+      title="Modale SENZA Teleport" 
+      @close="showModalNoTeleport = false" 
+    />
     
   </main>
 
