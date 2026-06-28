@@ -381,3 +381,17 @@ function calculateBooksMessage() {
 //         ...user
 //     });
 // };
+
+
+<!-- 
+<button class="but-toggle" @click="formShow = !formShow">Toggle</button> 
+<br>
+<Transition name="bounce">
+    <p v-if="formShow" style="text-align: center;">
+    Ciao, ecco del testo che rimbalza!
+</p>
+</Transition>
+-->
+      
+<!-- <ProductList></ProductList> -->
+     

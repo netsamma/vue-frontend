@@ -39,7 +39,6 @@ async function login(){
         console.error("Errore", error)
     }
 
-    
 }
 
 </script>

@@ -1,15 +1,14 @@
 <script setup>
 import Grid from '@/components/Grid.vue';
-import ProductList from '@/components/ProductList.vue';
 import Modal from '@/components/Modal.vue';
 import { onMounted, ref } from 'vue';
+import getProducts from '@/services/productService';
 
-const libri = ref([]);
-
-const formShow = ref(true);
+const products = ref([])
+const error = ref(null)
+const loading = ref(true)
 
 const showModalNoTeleport = ref(false);
-const showModalTeleport = ref(false);
 
 const gridLibriColumns = ['titolo', 'anno', 'genere', 'autore.nome']
 const radioSelection = ['titolo', 'anno', 'genere', 'autore.nome', 'all']
@@ -17,89 +16,99 @@ const radioSelection = ['titolo', 'anno', 'genere', 'autore.nome', 'all']
 const searchQuery = ref('')
 const selectedField = ref('all')
 
-onMounted(() => {
-  fetch('http://localhost:8000/api/libri')
-    .then((response) => {
-      // Controllo manuale dello stato HTTP
-      if (!response.ok) {
-        throw new Error(`Errore HTTP: ${response.status}`)
-      }
-      // Converte la risposta in JSON (ritorna una nuova Promise)
-      return response.json()
-    })
-    .then((data) => {
-      // Aggiorna lo stato reattivo con i dati ricevuti
-      libri.value = data.results
-    })
-    
-    console.log(libri.value);
-
+onMounted(async () => {
+   try {
+      products.value = await getProducts()
+   } catch (err) {
+      error.value = "Impossibile caricare i prodotti."
+   } finally {
+      loading.value = false
+   }
+   console.log(products.value);
 });
-
 
 </script>
 
 <template>
   <main class="main" >
-    <div>
-      <form id="search">
-        Cerca <input name="query" v-model="searchQuery">
-        
+    <div class="search-panel">
+      <form id="search" class="flex-item">
+        <input name="query" placeholder="Search..." v-model="searchQuery">
         <select v-model="selectedField">
           <option v-for="key in radioSelection" :key="key">
             {{ key }}
           </option>
-        </select>
-
+        </select> 
       </form>
-
-      <!-- <button class="but-toggle" @click="formShow = !formShow">Toggle</button> 
-      <br>
-      <Transition name="bounce">
-         <p v-if="formShow" style="text-align: center;">
-          Ciao, ecco del testo che rimbalza!
-        </p>
-      </Transition>
-      -->
-      
-      <!-- <ProductList></ProductList> -->
-     
+      <div class="butt-add" @click="showModalNoTeleport = true">+</div>
+      <Grid
+        class="flex-item"
+        :data="products"
+        :columns="gridLibriColumns"
+        :filter-key="searchQuery"
+        :selected-field="selectedField">
+      </Grid>
     </div>
-
-
-    <Grid
-      style="width: 45%;"
-      :data="libri"
-      :columns="gridLibriColumns"
-      :filter-key="searchQuery"
-      :selected-field="selectedField">
-    </Grid>
-
-    <div class="buttons">
-      <button @click="showModalNoTeleport = true">Apri SENZA Teleport</button>
-      <button @click="showModalTeleport = true">Apri CON Teleport</button>
-    </div>
-
+  
     <Modal 
-      :is-open="showModalNoTeleport" 
-      title="Modale SENZA Teleport" 
-      @close="showModalNoTeleport = false" 
+        :is-open="showModalNoTeleport" 
+        title="Modale" 
+        @close="showModalNoTeleport = false" 
     />
-    
+
   </main>
 
 </template>
 
 <style scoped>
-    .main{
+    .main {
       display: flex;
-      justify-content:space-between;
+      justify-content: space-between;
+      gap: 20px; /* Distanzia il blocco prodotti dal blocco dei bottoni laterali */
+    }
+
+    .search-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 15px; 
+    }
+
+    .flex-item {
+      width: 100%;            
+      /* Form e griglia prendono tutto il 100% del padre */
+      box-sizing: border-box; 
+      /* Evita che padding o bordi sballino la larghezza totale */
+    }
+
+    #search {
+      display: flex;          
+      gap: 10px;
+      width: 100%;
+    }
+
+    /* Fa in modo che l'input e la select si dividano equamente lo spazio */
+    #search input, 
+    #search select {
+      flex: 1;
+      padding: 6px;
+      box-sizing: border-box;
     }
 
     .but-toggle{
       margin: 20px;
       width: 200px;
     }
+
+    .butt-add{
+      padding: 15px;
+      background-color: rgb(107, 150, 229);
+      border: none;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     .bounce-enter-active {
         animation: bounce-in 0.8s;
     }

@@ -49,10 +49,8 @@ onMounted(async () => {
    console.log(products.value);
 })
 
-
-
-
 </script>
+
 
 <style scoped>
 

@@ -13,7 +13,8 @@ defineEmits(['close']);
     <div v-if="isOpen" class="modal-overlay" @click="$emit('close')">
       <div class="modal-content" @click.stop>
         <h3>{{ title }}</h3>
-        <p>Osserva come si comporta questa modale rispetto al container.</p>
+        <p>Esempio di modale, descrizione paragrafo</p>
+        <br>
         <button @click="$emit('close')">Chiudi</button>
       </div>
     </div>
@@ -41,6 +42,7 @@ defineEmits(['close']);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   text-align: center;
   max-width: 400px;
+  min-height: 200px;
   width: 100%;
 }
 
