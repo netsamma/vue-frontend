@@ -2,11 +2,12 @@
 import Grid from '@/components/Grid.vue';
 import Modal from '@/components/Modal.vue';
 import { onMounted, ref } from 'vue';
-import getProducts from '@/services/productService';
+import { getProducts } from '@/services/productService';
 
 const products = ref([])
 const error = ref(null)
 const loading = ref(true)
+const form = ref({})
 
 const showModalNoTeleport = ref(false);
 
@@ -52,9 +53,16 @@ onMounted(async () => {
   
     <Modal 
         :is-open="showModalNoTeleport" 
-        title="Modale" 
+        title="Aggiungi prodotto" 
         @close="showModalNoTeleport = false" 
-    />
+    >
+      <form action="" method="post">
+        <input type="text" placeholder="Titolo" v-model="form.titolo" class="input-item">
+        <input type="text" placeholder="Anno" v-model="form.anno" class="input-item">
+        <input type="text" placeholder="Genere" v-model="form.genere" class="input-item">
+        <button>Salva</button>
+      </form>
+    </Modal>
 
   </main>
 
@@ -97,6 +105,12 @@ onMounted(async () => {
     .but-toggle{
       margin: 20px;
       width: 200px;
+    }
+
+    .input-item{
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 5px;
     }
 
     .butt-add{

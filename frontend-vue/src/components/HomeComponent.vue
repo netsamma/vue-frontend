@@ -29,7 +29,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import ProductCard from '@/components/ProductCard.vue';
-import getProducts from '@/services/productService'
+import { getProducts, insertProduct } from '@/services/productService';
 import { useCartStore } from '@/stores/cartStore';
 
 const products = ref([])

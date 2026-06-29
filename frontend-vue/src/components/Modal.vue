@@ -12,9 +12,8 @@ defineEmits(['close']);
   <Transition name="modal-fade">
     <div v-if="isOpen" class="modal-overlay" @click="$emit('close')">
       <div class="modal-content" @click.stop>
-        <h3>{{ title }}</h3>
-        <p>Esempio di modale, descrizione paragrafo</p>
-        <br>
+        <h3 class="title">{{ title }}</h3>
+        <slot></slot>
         <button @click="$emit('close')">Chiudi</button>
       </div>
     </div>
@@ -49,12 +48,12 @@ defineEmits(['close']);
 /* Classi di Transizione di Vue 3 */
 .modal-fade-enter-active,
 .modal-fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
 }
 
 .modal-fade-enter-active .modal-content,
 .modal-fade-leave-active .modal-content {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
 }
 
 /* Stato Iniziale (quando entra) e Stato Finale (quando esce) */
@@ -66,6 +65,9 @@ defineEmits(['close']);
 .modal-fade-enter-from .modal-content,
 .modal-fade-leave-to .modal-content {
   transform: scale(0.8);
-  opacity: 0;
+}
+
+.title{
+  margin-bottom: 10px;
 }
 </style>
