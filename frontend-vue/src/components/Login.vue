@@ -16,7 +16,7 @@ async function login(){
     }
 
     try {
-        const response = await fetch("http://localhost:3000/api/login",{
+        const response = await fetch("https://deploy-django-backend.onrender.com/admin/login",{
             method: "POST",
             headers: {
                 'Content-type': 'application/json',

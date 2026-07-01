@@ -29,6 +29,19 @@ onMounted(async () => {
    console.log(products.value);
 });
 
+function saveProduct(){
+  console.log(form);
+  
+  fetch('https://deploy-django-backend.onrender.com/api/v1/libri/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form.value),
+  });
+
+}
+
 </script>
 
 <template>
@@ -57,7 +70,7 @@ onMounted(async () => {
         title="Aggiungi prodotto" 
         @close="showModalNoTeleport = false" 
     >
-      <form action="" method="post">
+      <form @submit.prevent="saveProduct">
         <input type="text" placeholder="Titolo" v-model="form.titolo" class="input-item">
         <input type="text" placeholder="Anno" v-model="form.anno" class="input-item">
         <input type="text" placeholder="Genere" v-model="form.genere" class="input-item">
