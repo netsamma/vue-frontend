@@ -3,6 +3,7 @@ import Grid from '@/components/Grid.vue';
 import Modal from '@/components/Modal.vue';
 import { onMounted, ref } from 'vue';
 import { getProducts } from '@/services/productService';
+import Button from '@/components/ui/Button.vue';
 
 const products = ref([])
 const error = ref(null)
@@ -60,7 +61,7 @@ onMounted(async () => {
         <input type="text" placeholder="Titolo" v-model="form.titolo" class="input-item">
         <input type="text" placeholder="Anno" v-model="form.anno" class="input-item">
         <input type="text" placeholder="Genere" v-model="form.genere" class="input-item">
-        <button>Salva</button>
+        <Button>Salva</Button>
       </form>
     </Modal>
 

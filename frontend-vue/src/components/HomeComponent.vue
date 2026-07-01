@@ -59,7 +59,7 @@ onMounted(async () => {
    grid: auto-flow / repeat(3, 1fr);
    gap: 20px;
 }
-
+/* 
 .badge {
    position: absolute;
    left: 5px;
@@ -69,7 +69,7 @@ onMounted(async () => {
    border-radius: 10px;
    font-size: 0.8em;
    padding: 4px;
-}
+} */
 
 .add-btn {
    padding: 10px;

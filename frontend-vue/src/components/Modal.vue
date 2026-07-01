@@ -1,4 +1,5 @@
 <script setup>
+
 defineProps({
   isOpen: Boolean,
   title: String
@@ -14,7 +15,7 @@ defineEmits(['close']);
       <div class="modal-content" @click.stop>
         <h3 class="title">{{ title }}</h3>
         <slot></slot>
-        <button @click="$emit('close')">Chiudi</button>
+        <span class="btn-close" @click="$emit('close')">x</span>
       </div>
     </div>
   </Transition>
@@ -35,6 +36,7 @@ defineEmits(['close']);
 }
 
 .modal-content {
+  position: relative;
   background: white;
   padding: 30px;
   border-radius: 12px;
@@ -69,5 +71,13 @@ defineEmits(['close']);
 
 .title{
   margin-bottom: 10px;
+}
+
+.btn-close{
+  font: 1.8em sans-serif;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
 }
 </style>

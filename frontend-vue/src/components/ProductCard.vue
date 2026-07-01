@@ -18,6 +18,18 @@
 </template>
 
 <style scoped>
+/* Seleziona la classe .badge che si trova dentro lo slot 
+passato dal padre*/
+:slotted(.badge) {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  color: rgb(245, 229, 229);
+  background-color: rgb(57, 113, 8);
+  border-radius: 10px;
+  font-size: 0.8em;
+  padding: 4px;
+}
 
 .product-card {
   position: relative;
@@ -46,7 +58,8 @@
 
 .product-card__content {
   padding: 16px;
-  flex-grow: 1; /* Spinge il footer sempre in fondo se le card hanno altezze diverse */
+  flex-grow: 1;
+  /* Spinge il footer sempre in fondo se le card hanno altezze diverse */
 }
 
 .product-card__title {
