@@ -8,6 +8,8 @@ const props = defineProps({
   selectedField: String,
 })
 
+defineEmits(['edit-clicked'])
+
 const sortKey = ref('')
 const sortOrders = ref(
   props.columns.reduce((o, key) => ((o[key] = 1), o), {})
@@ -123,6 +125,7 @@ function getAllKeys(obj, prefix = '') {
   return keys
 }
 
+
 </script>
 
 
@@ -137,6 +140,7 @@ function getAllKeys(obj, prefix = '') {
           <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
           </span>
         </th>
+        <th>Azioni</th>
       </tr>
     </thead>
     <tbody>
@@ -144,6 +148,7 @@ function getAllKeys(obj, prefix = '') {
         <td v-for="key in columns">
           {{getNestedValue(entry, key)}}
         </td>
+        <td><button @click="$emit('edit-clicked', entry.id)">Edit</button></td>
       </tr>
     </tbody>
   </table>

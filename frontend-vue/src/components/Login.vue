@@ -3,20 +3,22 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 import Button from './ui/Button.vue';
 import HeartIcon from './ui/HeartIcon.vue';
+import { useRouter } from 'vue-router'
 
 let username = ref("");
 let password = ref("");
 
 const authStore = useAuthStore();
+const router = useRouter()
 
 async function login(){
     const payload = {
         username: username.value,
         password: password.value
     }
-
+    console.log({payload: payload})
     try {
-        const response = await fetch("https://deploy-django-backend.onrender.com/admin/login",{
+        const response = await fetch("https://deploy-django-backend.onrender.com/api/v1/login/",{
             method: "POST",
             headers: {
                 'Content-type': 'application/json',
@@ -32,7 +34,9 @@ async function login(){
         console.log(data);
 
         if(data){
-            authStore.saveToken(data);
+            console.log({data: data.access})
+            authStore.saveToken(data.access);
+            router.push('/')
         }
             
     } catch (error) {
