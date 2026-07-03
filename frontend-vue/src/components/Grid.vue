@@ -31,8 +31,10 @@ const filteredData = computed(() => {
   if (key) {
     const order = sortOrders.value[key]
     data = data.slice().sort((a, b) => {
-      a = getNestedValue(a, key)
-      b = getNestedValue(b, key)
+      a = getNestedValue(a, key).toLowerCase()
+      b = getNestedValue(b, key).toLowerCase()
+      console.log(a, b);
+      
       return (a === b ? 0 : a > b ? 1 : -1) * order
     })
   }
@@ -207,5 +209,9 @@ th.active .arrow {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #fff;
+}
+button{
+  padding: 5px 10px;
+  background-color: burlywood;
 }
 </style>
