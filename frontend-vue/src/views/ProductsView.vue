@@ -2,10 +2,11 @@
 import Grid from '@/components/Grid.vue'
 import Modal from '@/components/Modal.vue'
 import { onMounted, ref } from 'vue'
-import { getProducts } from '@/services/productService'
+import { getData } from '@/services/productService'
 import Button from '@/components/ui/Button.vue'
 
 const products = ref([])
+const autoriList = ref([])
 const error = ref(null)
 const loading = ref(true)
 const form = ref({})
@@ -16,67 +17,95 @@ const isEditingRecord = ref(false)
 const gridLibriColumns = ['titolo', 'anno', 'genere', 'autore.nome']
 const radioSelection = ['titolo', 'anno', 'genere', 'autore.nome', 'all']
 
-const autori = ref([
-  {id:1,name:"Dante Alighieri"},
-  {id:2,name:"Jane Austin"},
-  {id:3,name:"Umberto Boccacio"}])
+
+
+  // {id:1,name:"Dante Alighieri"},
+  // {id:2,name:"Jane Austin"},
+  // {id:3,name:"Umberto Boccacio"}
 
 const searchQuery = ref('')
 const selectedField = ref('all')
 
 onMounted(async () => {
   try {
-    products.value = await getProducts()
+    // Recupero i libri dalla API /libri
+    products.value = await getData('https://deploy-django-backend.onrender.com/api/v1/libri/')
+
+    // Recupero gli autori per la <select> del form
+    autoriList.value = await getData('https://deploy-django-backend.onrender.com/api/v1/autori/')
+
   } catch (err) {
     error.value = 'Impossibile caricare i prodotti.'
   } finally {
     loading.value = false
   }
-  console.log(products.value)
+  console.log(autoriList.value)
+
 })
 
 async function saveProduct() {
-  console.log(form.value)
-  const token = localStorage.getItem('token') // or sessionStorage, or from Vuex/Pinia store
+  console.log("Dati form inviati:", form.value)
+  const token = localStorage.getItem('token')
   console.log({ token: token })
-  if(isEditingRecord.value){
 
-    //Modificando il record
-    try {
-      await fetch(`https://deploy-django-backend.onrender.com/api/v1/libri/${form.value.id}/`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form.value),
-      })
-      showModalNoTeleport.value = false
-    } catch (error) {
-      console.error('Error trying to save data', error)
+  // 1. Determina dinamicamente l'URL e il metodo HTTP
+  const isEditing = isEditingRecord.value
+  const url = isEditing 
+    ? `https://deploy-django-backend.onrender.com/api/v1/libri/${form.value.id}/`
+    : `https://deploy-django-backend.onrender.com/api/v1/libri/`
+  const method = isEditing ? 'PUT' : 'POST'
+
+  try {
+    // 2. Esegui la chiamata API (valida sia per PUT che per POST)
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(form.value),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Errore HTTP! Stato: ${response.status}`)
     }
+
+    // Estrai il risultato restituito dal backend Django
+    const result = await response.json()
+
+    // 3. Arricchisci l'oggetto con l'autore completo per la reattività di Vue
+    const autoreSelezionato = autoriList.value.find(a => a.id === form.value.autore)
+    //console.log({ autoreSelezionato, autoriList: autoriList.value })
+
+    const enrichedProduct = {
+      ...result,
+      autore: autoreSelezionato || result.autore
+    }
+
+    console.log(enrichedProduct);
     
-  }else{
-    //Aggiungo il record
-    try {
-      fetch('https://deploy-django-backend.onrender.com/api/v1/libri/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form.value),
-      })
-      showModalNoTeleport.value = false
-    } catch (error) {
-      console.error('Error trying to save data', error)
-    }
-  }
 
-  products.value = [...products.value, form.value ]
-  form.value = {}
- 
-  
+    // 4. Aggiorna lo stato locale dell'array `products`
+    if (isEditing) {
+      const index = products.value.findIndex((p) => p.id === result.id)
+      if (index !== -1) {
+        products.value[index] = enrichedProduct
+      }
+    } else {
+      products.value = [...products.value, enrichedProduct]
+    }
+
+    // 5. Reset dello stato della UI in caso di successo
+    showModalNoTeleport.value = false
+    form.value = {}
+    isEditingRecord.value = false
+
+    //console.log({ products: products.value })
+
+  } catch (error) {
+    console.error('Error trying to save data:', error.message)
+    // Qui potresti aggiungere un messaggio di errore visibile all'utente
+  }
 }
 
 function editRecord(id){
@@ -127,19 +156,17 @@ function editRecord(id){
           v-model="form.titolo" 
           class="input-item" 
         />
-        <input type="number" placeholder="Anno" v-model="form.anno" class="input-item" />
+        <input type="number" placeholder="Anno" v-model.number="form.anno" class="input-item" />
         <input type="text" placeholder="Genere" v-model="form.genere" class="input-item" />
-        <input type="number" placeholder="autore id" v-model="form.autore" class="input-item" />
+        <input type="number" placeholder="autore id" v-model.number="form.autore" class="input-item" />
         <select v-model="form.autore" class="select-item" >
-           <option 
-            v-for="autore in autori" 
+          <option 
+            v-for="autore in autoriList" 
             :key="autore.id" 
             :value="autore.id"
           >
-          {{autore.name}}
-        
-        </option> 
-          
+            {{autore.nome}}
+          </option> 
         </select>
         <Button>Salva</Button>
       </form>

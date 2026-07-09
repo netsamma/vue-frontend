@@ -29,7 +29,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import ProductCard from '@/components/ProductCard.vue';
-import { getProducts, insertProduct } from '@/services/productService';
+import { getData } from '@/services/productService';
 import { useCartStore } from '@/stores/cartStore';
 
 const products = ref([])
@@ -40,7 +40,7 @@ const cartStore = useCartStore();
 
 onMounted(async () => {
    try {
-      products.value = await getProducts()
+      products.value = await getData('https://deploy-django-backend.onrender.com/api/v1/libri/')
    } catch (err) {
       error.value = "Impossibile caricare i prodotti."
    } finally {
