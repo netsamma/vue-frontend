@@ -16,6 +16,11 @@ const isEditingRecord = ref(false)
 const gridLibriColumns = ['titolo', 'anno', 'genere', 'autore.nome']
 const radioSelection = ['titolo', 'anno', 'genere', 'autore.nome', 'all']
 
+const autori = ref([
+  {id:1,name:"Dante Alighieri"},
+  {id:2,name:"Jane Austin"},
+  {id:3,name:"Umberto Boccacio"}])
+
 const searchQuery = ref('')
 const selectedField = ref('all')
 
@@ -35,9 +40,10 @@ async function saveProduct() {
   const token = localStorage.getItem('token') // or sessionStorage, or from Vuex/Pinia store
   console.log({ token: token })
   if(isEditingRecord.value){
+
     //Modificando il record
     try {
-      fetch('https://deploy-django-backend.onrender.com/api/v1/libri/', {
+      await fetch(`https://deploy-django-backend.onrender.com/api/v1/libri/${form.value.id}/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +73,7 @@ async function saveProduct() {
     }
   }
 
-  products.value = await getProducts()
+  products.value = [...products.value, form.value ]
   form.value = {}
  
   
@@ -100,7 +106,7 @@ function editRecord(id){
           </option>
         </select>
       </form>
-      <div class="butt-add" @click="showModalNoTeleport = true">+</div>
+      <div class="butt-add" @click="showModalNoTeleport = true; form={}">+</div>
       <Grid class="flex-item" 
         :data="products" 
         :columns="gridLibriColumns" 
@@ -124,6 +130,17 @@ function editRecord(id){
         <input type="number" placeholder="Anno" v-model="form.anno" class="input-item" />
         <input type="text" placeholder="Genere" v-model="form.genere" class="input-item" />
         <input type="number" placeholder="autore id" v-model="form.autore" class="input-item" />
+        <select v-model="form.autore" class="select-item" >
+           <option 
+            v-for="autore in autori" 
+            :key="autore.id" 
+            :value="autore.id"
+          >
+          {{autore.name}}
+        
+        </option> 
+          
+        </select>
         <Button>Salva</Button>
       </form>
     </Modal>
@@ -172,10 +189,23 @@ function editRecord(id){
   width: 200px;
 }
 
+/* Applica la regola specificamente agli elementi del form */
+form input, form select {
+  width: 100%;
+  box-sizing: border-box; /* Risolve il problema dello sbrodolamento */
+}
+
 .input-item {
   width: 100%;
   margin-bottom: 10px;
   padding: 5px;
+}
+
+.select-item {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: beige;
 }
 
 .butt-add {

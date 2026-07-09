@@ -29,15 +29,23 @@ const filteredData = computed(() => {
   }
   const key = sortKey.value
   if (key) {
-    const order = sortOrders.value[key]
-    data = data.slice().sort((a, b) => {
-      a = getNestedValue(a, key).toLowerCase()
-      b = getNestedValue(b, key).toLowerCase()
-      console.log(a, b);
-      
-      return (a === b ? 0 : a > b ? 1 : -1) * order
-    })
-  }
+  const order = sortOrders.value[key]
+  data = data.slice().sort((a, b) => {
+    let valA = getNestedValue(a, key)
+    let valB = getNestedValue(b, key)
+
+    // Gestione numeri
+    if (typeof valA === 'number' && typeof valB === 'number') {
+      return (valA - valB) * order
+    }
+
+    // Gestione stringhe (converte in stringa se misti e usa localeCompare per accenti)
+    const strA = String(valA).toLowerCase()
+    const  strB = String(valB).toLowerCase()
+    
+    return (strA === strB ? 0 : strA > strB ? 1 : -1) * order
+  })
+}
   return data
 })
 
