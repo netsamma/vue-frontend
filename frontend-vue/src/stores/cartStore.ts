@@ -3,8 +3,9 @@ import {ref, computed} from 'vue';
 
 export interface Product {
     id: number
-    name: string
-    price: number
+    nome: string
+    prezzo: number
+    descrizione: string
 }
 
 export interface CartItem extends Product{
@@ -20,7 +21,7 @@ export const useCartStore = defineStore('cart', () => {
   });
 
   const totalPrice = computed<number>(() => 
-    items.value.reduce((acc, item) => acc + (item.price * item.quantity), 0)
+    items.value.reduce((acc, item) => acc + (item.prezzo * item.quantity), 0)
   )
 
   const addToCart = (product: Product) => {
@@ -37,5 +38,6 @@ export const useCartStore = defineStore('cart', () => {
     items,
     totalItems,
     addToCart,
+    totalPrice
   };
 });

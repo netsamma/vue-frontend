@@ -71,7 +71,7 @@ function handleLogout() {
 .navbar .nav-links {
     display: flex;
     list-style: none;
-    /* Rimuove i pallini dell'elenco puntato */
+    align-items: center;
 }
 
 /* Spaziatura tra i singoli elementi della lista */

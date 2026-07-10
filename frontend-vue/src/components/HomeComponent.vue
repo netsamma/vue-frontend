@@ -4,14 +4,14 @@
          <template #image>
             <div class="badge-wrapper">
                <span class="badge">Sconto 20%</span>
-               <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="Scarpe Nike" />
+               <img :src="product.immagine_url" alt="Scarpe Nike" />
             </div>
          </template>
 
          <template #content>
             <span class="category">Calzature</span>
-            <h3 class="custom-title">{{ product.titolo }}</h3>
-            <p class="custom-desc">Comfort eccezionale e design iconico per le tue sessioni di corsa quotidiane.</p>
+            <h3 class="custom-title">{{ product.nome }}</h3>
+            <p class="custom-desc">{{ product.descrizione }}</p>
          </template>
 
          <template #footer>
@@ -40,7 +40,7 @@ const cartStore = useCartStore();
 
 onMounted(async () => {
    try {
-      products.value = await getData('https://deploy-django-backend.onrender.com/api/v1/libri/')
+      products.value = await getData('https://deploy-django-backend.onrender.com/api/v1/scarpe/')
    } catch (err) {
       error.value = "Impossibile caricare i prodotti."
    } finally {
